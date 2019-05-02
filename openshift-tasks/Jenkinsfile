@@ -48,24 +48,19 @@ podTemplate(
 
       // TBD: The next two stages should run in parallel
       stage('Tests and Analysis') {
-        failFast true
         // Using Maven run the unit tests
-        parallel {
-          stage('Unit Tests') {
+        parallel unittests: {
             echo "Running Unit Tests"
             sh "${mvnCmd} test"
 
             // This next step is optional.
             // It displays the results of tests in the Jenkins Task Overview
             step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-          }
-
-          // Using Maven to call SonarQube for Code Analysis
-          stage('Code Analysis') {
+        },
+        code_analysis: {
             echo "Running Code Analysis"
 
             sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://sonarqube.gpte-hw-cicd.svc.cluster.local:9000/ -Dsonar.projectName=${JOB_BASE_NAME} -Dsonar.projectVersion=${devTag}"
-          }
         }
       }
 
