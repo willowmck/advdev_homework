@@ -73,6 +73,8 @@ podTemplate(
       // Build the OpenShift Image in OpenShift and tag it.
       stage('Build and Tag OpenShift Image') {
         echo "Building OpenShift container image tasks:${devTag}"
+        def devProject = "${GUID}-tasks-dev"
+
         // Start Binary Build in OpenShift using the file we just published
         // The filename is openshift-tasks.war in the 'target' directory of your current
         // Jenkins workspace
