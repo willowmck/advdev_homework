@@ -105,8 +105,8 @@ podTemplate(
 
               // Update the Config Map which contains the users for the Tasks application
               // (just in case the properties files changed in the latest commit)
-              // openshift.selector('configmap', 'tasks-config').delete()
-              // def configmap = openshift.create('configmap', 'tasks-config', '--from-file=./configuration/application-users.properties', '--from-file=./configuration/application-roles.properties' )
+              openshift.selector('configmap', 'tasks-config').delete()
+              def configmap = openshift.create('configmap', 'tasks-config', '--from-file=./configuration/application-users.properties', '--from-file=./configuration/application-roles.properties' )
 
               // Deploy the development application.
               openshift.selector("dc", "tasks").rollout().latest();
@@ -171,8 +171,8 @@ podTemplate(
               openshift.apply(dc)
 
               // Update Config Map in change config files changed in the source
-              // openshift.selector("configmap", "${destApp}-config").delete()
-              // def configmap = openshift.create("configmap", "${destApp}-config", "--from-file=./configuration/application-users.properties", "--from-file=./configuration/application-roles.properties" )
+              openshift.selector("configmap", "${destApp}-config").delete()
+              def configmap = openshift.create("configmap", "${destApp}-config", "--from-file=./configuration/application-users.properties", "--from-file=./configuration/application-roles.properties" )
 
               // Deploy the inactive application.
               openshift.selector("dc", "${destApp}").rollout().latest();
