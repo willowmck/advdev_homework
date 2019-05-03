@@ -157,16 +157,18 @@ podTemplate(
         script {
           openshift.withCluster() {
             openshift.withProject("${prodProject}") {
+
               activeApp = openshift.selector("route", "tasks").object().spec.to.name
               if (activeApp == "tasks-green") {
                 destApp = "tasks-blue"
               }
+
+              openshift.set("env", "dc/${destApp}", "VERSION=\"${prodTag} (${destApp})\"")
               echo "Active Application:      " + activeApp
               echo "Destination Application: " + destApp
 
               // Update the Image on the Production Deployment Config
               def dc = openshift.selector("dc/${destApp}").object()
-              openshift.set("env", "dc/${destApp}", "VERSION=\"${prodTag} (${destApp})\"")
               //dc.spec.template.spec.containers[0].image="image-registry.openshift-image-registry.svc:5000/${devProject}/tasks:${prodTag}"
               // Use this for OpenShift 3
               dc.spec.template.spec.containers[0].image="docker-registry.default.svc:5000/${devProject}/tasks:${prodTag}"
