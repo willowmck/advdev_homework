@@ -102,6 +102,7 @@ podTemplate(
 
               // For OpenShift 3 use this:
               openshift.set("image", "dc/tasks", "tasks=docker-registry.default.svc:5000/${devProject}/tasks:${devTag}")
+              openshift.set("env", "dc/tasks", "VERSION=\"${devTag} (tasks-dev)\"")
 
               // Update the Config Map which contains the users for the Tasks application
               // (just in case the properties files changed in the latest commit)
@@ -164,6 +165,7 @@ podTemplate(
               echo "Destination Application: " + destApp
 
               // Update the Image on the Production Deployment Config
+              openshift.set("env", "dc/${destApp}", "VERSION=\"${prodTag} (${destApp})\"")
               def dc = openshift.selector("dc/${destApp}").object()
               //dc.spec.template.spec.containers[0].image="image-registry.openshift-image-registry.svc:5000/${devProject}/tasks:${prodTag}"
               // Use this for OpenShift 3
