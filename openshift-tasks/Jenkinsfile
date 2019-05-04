@@ -173,7 +173,7 @@ podTemplate(
               
               //Set VERSION environment variable
               // dc.spec.template.spec.containers[0].env[0].value="${prodTag} (${destApp})"
-              openshift.set("env", "dc/${destApp}", "VERSION=\"${prodTag} (${destApp})\"")
+              // openshift.set("env", "dc/${destApp}", "VERSION=\"${prodTag} (${destApp})\"")
               openshift.apply(dc)
 
               // Update Config Map in change config files changed in the source
